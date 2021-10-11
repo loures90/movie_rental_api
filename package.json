@@ -9,7 +9,7 @@
     "start": "tsc && node ./build/index.js",
     "dev": "ts-node-dev ./src/index.ts",
     "db:create": "sequelize db:create --env test",
-    "migrate": "yarn sequelize db:migrate",
+    "migrate": "yarn sequelize db:migrate --env test",
     "test": "jest --passWithNoTests --silent --runInBand",
     "build": " yarn clean && tsc -p tsconfig.build.json && yarn migrate"
   },
