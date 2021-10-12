@@ -3,13 +3,15 @@ import cors from 'cors'
 import { AddressInfo } from "net";
 import { testConnection } from './infra/connection';
 import { userRouter } from './routes/users/user';
+import { moviesRouter } from './routes/movies/movies';
 
 const app = express()
 
 app.use(express.json())
 app.use(cors())
 
-app.use("/user", userRouter);
+app.use("/user", userRouter)
+app.use('/movies', moviesRouter)
 
 const server = app.listen(process.env.PORT || 3003, () => {
     if (server) {

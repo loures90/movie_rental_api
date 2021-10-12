@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { userBusiness, UserBusiness } from "../../business/users/user";
+import { userBusiness } from "../../business/users/user";
 export class UserController {
     async signup(req: Request, res: Response) {
         try {

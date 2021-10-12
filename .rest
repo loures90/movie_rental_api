@@ -16,3 +16,51 @@ Content-Type: application/json
     "email":"test@teste.com",
     "password": "123"
 }
+###
+
+POST http://localhost:3003/movies/add
+Content-Type: application/json
+
+{
+    "name": "Teste",
+    "email":"teste@teste.com",
+    "login": "teste",
+    "password": "123456"
+}
+
+###
+
+GET http://localhost:3003/movies/
+Content-Type: application/json
+
+###
+###
+
+GET http://localhost:3003/movies/ID
+Content-Type: application/json
+
+###
+###
+
+GET http://localhost:3003/movies/search?title=any_title
+Content-Type: application/json
+
+###
+###
+
+DELETE http://localhost:3003/movies/ID
+Content-Type: application/json
+
+###
+
+PATCH http://localhost:3003/movies/ID
+Content-Type: application/json
+
+{
+    "name": "Teste",
+    "email":"teste@teste.com",
+    "login": "teste",
+    "password": "123456"
+}
+
+###
