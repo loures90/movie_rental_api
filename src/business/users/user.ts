@@ -1,17 +1,18 @@
-import { SignupUserDB } from "../../../infra/protocols/signup/signup-db";
-import { AddUserModel } from "../../../models/users";
-import { IdGenerator } from "../../../services/IdGenerator";
-import { HashManager } from "../../../services/HashManager";
-import { SignupUserDTO } from "../../protocols/users/signup-users-dto";
-import { BaseError } from '../../../models/error';
+import { AddUserModel } from "../../models/users";
+import { idGenerator, IdGenerator } from "../../services/IdGenerator";
+import { hashManager, HashManager } from "../../services/HashManager";
+import { BaseError } from '../../models/error';
+import { dbUsers, DbUsers } from "../../infra/database/user/user";
+import { authenticator, Authenticator } from "../../services/Authenticator";
 
-export class DbSignupUsers implements SignupUserDTO{
+export class UserBusiness{
     constructor(
         readonly idGenerator: IdGenerator,
-        readonly signupUserDB: SignupUserDB,
-        readonly hashManager: HashManager
+        readonly hashManager: HashManager,
+        readonly dbUsers: DbUsers,
+        readonly authenticator: Authenticator
     ){}
-    async add(userInput: AddUserModel):Promise<Boolean>{
+    async signup(userInput: AddUserModel):Promise<string>{
         Object.values(userInput).forEach(value => {
             if(!value) throw new BaseError('Values can not be empty',400)            
         });
@@ -32,7 +33,10 @@ export class DbSignupUsers implements SignupUserDTO{
             login: userInput.login,
             password: hashPassword
         }
-        this.signupUserDB.add(user)
-        return true
+        const result = await this.dbUsers.add(user)
+        
+        const token  = result && this.authenticator.generateToken({ id })
+        return token
     }
 }
+export const userBusiness = new UserBusiness(idGenerator, hashManager, dbUsers, authenticator);

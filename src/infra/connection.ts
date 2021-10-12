@@ -7,6 +7,7 @@ export const connection = new Sequelize({
     dialect: 'mysql',
     username: process.env.DB_USER || 'any_user',
     password: process.env.DB_PASSWORD || 'any_password',
+    database: process.env.TEST_DB_DATABASE,
     define: {
         timestamps: true,
         underscored: true

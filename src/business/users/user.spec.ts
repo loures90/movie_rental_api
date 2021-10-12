@@ -1,10 +1,11 @@
-import { IdGenerator, idGenerator } from '../../../services/IdGenerator'
-import { fixAddUser } from '../../../_fixtures/users'
-import { DbSignupUsers } from './signup-user'
-import { SignupUserDB } from "../../../infra/protocols/signup/signup-db";
-import { UsersModel } from '../../../models/users';
-import { BaseError } from '../../../models/error';
-import { HashManager } from '../../../services/HashManager';
+import { IdGenerator } from '../../services/IdGenerator'
+import { fixAddUser } from '../../_fixtures/users'
+import { UsersModel } from '../../models/users';
+import { BaseError } from '../../models/error';
+import { HashManager } from '../../services/HashManager';
+import { DbUsers } from '../../infra/database/user/user';
+import { AuthenticationData, Authenticator } from '../../services/Authenticator';
+import { UserBusiness } from './user';
 
 
 class IdGeneratorStub implements IdGenerator {
@@ -14,16 +15,16 @@ class IdGeneratorStub implements IdGenerator {
 }
 const idGeneratorStub = new IdGeneratorStub()
 
-class SignupUserDBStub implements SignupUserDB {
+class DbUsersStub extends DbUsers {
     add(user: UsersModel): Promise<Boolean> {
         return Promise.resolve(true)
     }
 }
-const signupUserDBStub = new SignupUserDBStub()
+const dbUsersStub = new DbUsersStub()
 
 class HashManagerStub implements HashManager {
     async hash(text: string): Promise<string> {
-        return Promise.resolve('password')
+        return Promise.resolve('hash_password')
     }
     public async compare(text: string, hash: string): Promise<boolean>{
         return Promise.resolve(true)
@@ -31,15 +32,25 @@ class HashManagerStub implements HashManager {
 }
 const hashManagerStub = new HashManagerStub()
 
-const dbSignupUsersStup = new DbSignupUsers(idGeneratorStub, signupUserDBStub, hashManagerStub)
+class AuthenticatorStub implements Authenticator {
+    public generateToken(input: AuthenticationData, expiresIn: 'any'): string {
+        return 'token'
+    }
+    public getData(token: string): AuthenticationData {
+        return { id: 'abc123' }
+    }
+}
+const authenticatorStub = new AuthenticatorStub()
+
+const userBusinessStub = new UserBusiness(idGeneratorStub, hashManagerStub, dbUsersStub, authenticatorStub)
 
 describe('USER', () => {
     test('It should create an user', async () => {
-        const result = await dbSignupUsersStup.add(fixAddUser)
-        expect(result).toBe(true)
+        const result = await userBusinessStub.signup(fixAddUser)
+        expect(result).toBe('token')
     })
     test('It should check if some input is empty valid', async () => {
-        const result = dbSignupUsersStup.add({
+        const result = userBusinessStub.signup({
             name: '',
             login: 'any_login',
             email: 'any_email@email.com',
@@ -48,16 +59,16 @@ describe('USER', () => {
         await expect(result).rejects.toThrowError(BaseError)
     })
     test('It should check if email is not valid', async () => {
-        const result = dbSignupUsersStup.add({
+        const result = userBusinessStub.signup({
             name: 'any_name',
             login: 'any_login',
             email: 'any_emailemail.com',
-            password: 'any_password',
+            password: 'password',
         })
         await expect(result).rejects.toThrowError(BaseError)
     })
     test('It should check if password is not valid', async () => {
-        const result = dbSignupUsersStup.add({
+        const result = userBusinessStub.signup({
             name: 'any_name',
             login: 'any_login',
             email: 'any_emailemail.com',
@@ -67,12 +78,12 @@ describe('USER', () => {
     })
     test('It should call hashPassword with correct values', async () => {
         const hashSpy = jest.spyOn(hashManagerStub, 'hash')
-        await dbSignupUsersStup.add(fixAddUser)
+        await userBusinessStub.signup(fixAddUser)
         expect(hashSpy).toHaveBeenCalledWith(fixAddUser.password)
     })
-    test('It should call signupUserDB with correct values', async () => {
-        const signupDBSpy = jest.spyOn(signupUserDBStub, 'add')
-        await dbSignupUsersStup.add(fixAddUser)
-        expect(signupDBSpy).toHaveBeenCalledWith({ ...fixAddUser, password: 'password', id: 'abc123' })
+    test('It should call dbUsers with correct values', async () => {
+        const signupSpy = jest.spyOn(dbUsersStub, 'add')
+        await userBusinessStub.signup(fixAddUser)
+        expect(signupSpy).toHaveBeenCalledWith({ ...fixAddUser, password: 'hash_password', id: 'abc123' })
     })
 })

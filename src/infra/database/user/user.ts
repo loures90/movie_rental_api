@@ -5,7 +5,7 @@ import { SignupUserDB } from '../../protocols/signup/signup-db'
 export class DbUsers implements SignupUserDB{
     private tableName = 'tbUsers'
     async add(user: UsersModel):Promise<Boolean>{
-        connection.query(`INSERT INTO ${this.tableName} (id, name, email, login, password)
+        await connection.query(`INSERT INTO ${this.tableName} (id, name, email, login, password)
         VALUES (
             '${user.id}', 
             '${user.name}', 
@@ -15,3 +15,4 @@ export class DbUsers implements SignupUserDB{
         return true
     }
 }
+export const dbUsers = new DbUsers()
