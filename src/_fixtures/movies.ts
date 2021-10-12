@@ -1,14 +1,14 @@
-import { AddMoviesModel, MoviesModel } from "../models/movies";
+import { AddMoviesModel, Categories, MoviesModel } from "../models/movies";
 
-const fixMovies: MoviesModel = {
+export const fixMovies: MoviesModel = {
     id: 'any_id',
     title: 'any_title',
     year_release: '2021',
-    gender: 'any_gender'
+    category: Categories.Action
 }
 
-const fixAddMovies: AddMoviesModel = {
+export const fixAddMovies: AddMoviesModel = {
     title: 'any_title',
     year_release: '2021',
-    gender: 'any_gender'
+    category: 'Action'
 }

@@ -1,6 +1,9 @@
+import { MoviesModel } from "../../../models/movies";
+
 export class DBMovies {
     constructor(){}
-    async create() {
+    async create(movie: MoviesModel):Promise<Boolean> {
+        return true
     }
 
     async list() {
