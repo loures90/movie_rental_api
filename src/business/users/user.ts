@@ -24,7 +24,7 @@ export class UserBusiness {
         if (userInput.password.length < 6)
             throw new BaseError('password not valid, it should have at least 6 characters');
         const userExist = await this.dbUsers.get(userInput.email)
-        if(userExist) throw new BaseError('This e-mail is already used');
+        if(userExist) throw new BaseError('This e-mail already used');
 
         const hashPassword = await this.hashManager.hash(userInput.password)
         const id = this.idGenerator.generate()
