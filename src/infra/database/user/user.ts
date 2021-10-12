@@ -1,6 +1,6 @@
 import { UsersModel } from '../../../models/users'
 import { connection } from '../../connection'
-import { GetUserDB } from '../../protocols/users/get-user'
+import { GetUserDB } from '../../protocols/users/get-user-db'
 import { SignupUserDB } from '../../protocols/users/signup-db'
 
 export class DbUsers implements SignupUserDB, GetUserDB{
