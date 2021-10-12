@@ -7,3 +7,8 @@ export interface UsersModel {
 }
 export interface AddUserModel extends Omit<UsersModel, 'id'> {
 }
+
+export interface LoginModel {
+    email: string
+    password: string
+}

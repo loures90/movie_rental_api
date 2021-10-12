@@ -19,13 +19,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Authenticator = void 0;
+exports.authenticator = exports.Authenticator = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
 class Authenticator {
     generateToken(input, expiresIn = process.env.ACCESS_TOKEN_EXPIRES_IN) {
         const token = jwt.sign({
             id: input.id,
-            role: input.role
         }, process.env.JWT_KEY, {
             expiresIn,
         });
@@ -34,12 +33,12 @@ class Authenticator {
     getData(token) {
         const payload = jwt.verify(token, process.env.JWT_KEY);
         const result = {
-            id: payload.id,
-            role: payload.role
+            id: payload.id
         };
         return result;
     }
 }
 exports.Authenticator = Authenticator;
 exports.default = new Authenticator();
+exports.authenticator = new Authenticator();
 //# sourceMappingURL=Authenticator.js.map

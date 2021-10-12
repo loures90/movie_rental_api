@@ -6,13 +6,19 @@ export class UserController {
             const { name, email, login, password } = req.body
             const token = await userBusiness.signup({ name, email, login, password })
             res.status(200).send( {token} );
-        } catch (error) {
-            throw error;
+        } catch (error: any) {
+            res.status(error.status || 400).send({error: error.message});
         }
     }
 
     async login(req: Request, res: Response) {
-
+        try {
+            const { email, password } = req.body
+            const token = await userBusiness.login({ email, password })
+            res.status(200).send( {token} );
+        } catch (error: any) {
+            res.status(error.status || 400).send({error: error.message});
+        }
     }
 }
 export const userController = new UserController()

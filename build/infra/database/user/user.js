@@ -9,34 +9,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userController = exports.UserController = void 0;
-const user_1 = require("../../business/users/user");
-class UserController {
-    signup(req, res) {
+exports.dbUsers = exports.DbUsers = void 0;
+const connection_1 = require("../../connection");
+class DbUsers {
+    constructor() {
+        this.tableName = 'tbUsers';
+    }
+    add(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { name, email, login, password } = req.body;
-                const token = yield user_1.userBusiness.signup({ name, email, login, password });
-                res.status(200).send({ token });
-            }
-            catch (error) {
-                throw error;
-            }
+            yield connection_1.connection.query(`INSERT INTO ${this.tableName} (id, name, email, login, password)
+        VALUES (
+            '${user.id}', 
+            '${user.name}', 
+            '${user.email}', 
+            '${user.login}', 
+            '${user.password}');`);
+            return true;
         });
     }
-    login(req, res) {
+    get(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { email, password } = req.body;
-                const token = yield user_1.userBusiness.login({ email, password });
-                res.status(200).send({ token });
-            }
-            catch (error) {
-                throw error;
-            }
+            return yield connection_1.connection.query(`SELECT id, password FROM ${this.tableName};`);
         });
     }
 }
-exports.UserController = UserController;
-exports.userController = new UserController();
+exports.DbUsers = DbUsers;
+exports.dbUsers = new DbUsers();
 //# sourceMappingURL=user.js.map
