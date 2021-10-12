@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { moviesBusiness } from "../../business/movies/movies";
+import { BaseError } from "../../models/error";
 
 export class MoviesController {
     async create(req: Request, res: Response) {
         try {
+            if(!req.headers.authorization) throw new BaseError('Forbidden')
             await moviesBusiness.create(req.body, req.headers.authorization)
             res.status(200).send(true);
         } catch (error: any) {

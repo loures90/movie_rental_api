@@ -13,19 +13,19 @@ POST http://localhost:3003/user/login
 Content-Type: application/json
 
 {
-    "email":"test@teste.com",
-    "password": "123"
+    "email":"teste@teste.com",
+    "password": "123456"
 }
 ###
 
 POST http://localhost:3003/movies/add
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhYjNhM2JhLWY0MGItNDU2MC1iY2ZmLWQxN2FjMGNhNTJlNSIsImlhdCI6MTYzNDA2MzY0NSwiZXhwIjoxNjM0MTUwMDQ1fQ.1evX_JxaX75kJGanrPRK7cYXaGX9AWoQr0htvWuc-zw
 
 {
-    "name": "Teste",
-    "email":"teste@teste.com",
-    "login": "teste",
-    "password": "123456"
+    "title": "Teste",
+    "year_release":"teste@teste.com",
+    "category": "Action"
 }
 
 ###
