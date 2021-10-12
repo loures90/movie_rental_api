@@ -1,3 +1,4 @@
+"use strict";
 module.exports({
     dialect: 'mysql',
     username: process.env.DB_USER || 'any_user',
@@ -6,4 +7,5 @@ module.exports({
         timestamps: true,
         underscored: true
     }
-})
+});
+//# sourceMappingURL=database.js.map

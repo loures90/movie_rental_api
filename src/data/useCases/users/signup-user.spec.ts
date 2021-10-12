@@ -1,7 +1,7 @@
 import { IdGenerator, idGenerator } from '../../../services/IdGenerator'
 import { fixAddUser } from '../../../_fixtures/users'
 import { DbSignupUsers } from './signup-user'
-import { SignupUserDB } from "../../infra/protocols/signup/signup-db";
+import { SignupUserDB } from "../../../infra/protocols/signup/signup-db";
 import { UsersModel } from '../../../models/users';
 import { BaseError } from '../../../models/error';
 import { HashManager } from '../../../services/HashManager';

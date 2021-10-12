@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { AddressInfo } from "net";
-import { testConnection } from './data/infra/connection';
+import { testConnection } from './infra/connection';
 import { userRouter } from './routes/users/user';
 
 const app = express()

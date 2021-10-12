@@ -1,4 +1,4 @@
-import { UsersModel } from '../../../../models/users'
+import { UsersModel } from '../../../models/users'
 import { connection } from '../../connection'
 import { SignupUserDB } from '../../protocols/signup/signup-db'
 
