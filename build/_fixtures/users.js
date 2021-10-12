@@ -15,7 +15,7 @@ exports.fixAddUser = {
     password: 'any_password',
 };
 exports.fixLogin = {
-    email: 'any_email@email.com',
+    email: 'any_login@email.com',
     password: 'any_password',
 };
 //# sourceMappingURL=users.js.map

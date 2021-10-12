@@ -23,8 +23,10 @@ class DbUsersStub extends user_1.DbUsers {
     add(user) {
         return Promise.resolve(true);
     }
-    get(id) {
-        return Promise.resolve({ id: 'abc123', password: 'password' });
+    get(email) {
+        if (email === users_1.fixLogin.email)
+            return Promise.resolve({ id: 'abc123', password: 'password' });
+        return Promise.resolve(undefined);
     }
 }
 const dbUsersStub = new DbUsersStub();
@@ -93,6 +95,11 @@ describe('USER', () => {
             const signupSpy = jest.spyOn(dbUsersStub, 'add');
             yield userBusinessStub.signup(users_1.fixAddUser);
             expect(signupSpy).toHaveBeenCalledWith(Object.assign(Object.assign({}, users_1.fixAddUser), { password: 'hash_password', id: 'abc123' }));
+        }));
+        test('It should call dbUsers with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
+            const getSpy = jest.spyOn(dbUsersStub, 'get');
+            yield userBusinessStub.signup(users_1.fixAddUser);
+            expect(getSpy).toHaveBeenCalledWith('any_email@email.com');
         }));
     });
     describe('Login', () => {

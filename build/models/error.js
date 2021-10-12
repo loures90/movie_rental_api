@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseError = void 0;
 class BaseError extends Error {
     constructor(message, status) {
-        super();
+        super(message);
+        this.message = message;
+        this.status = status;
     }
 }
 exports.BaseError = BaseError;

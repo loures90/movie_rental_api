@@ -35,6 +35,9 @@ class UserBusiness {
             });
             if (userInput.password.length < 6)
                 throw new error_1.BaseError('password not valid, it should have at least 6 characters');
+            const userExist = yield this.dbUsers.get(userInput.email);
+            if (userExist)
+                throw new error_1.BaseError('This e-mail already used');
             const hashPassword = yield this.hashManager.hash(userInput.password);
             const id = this.idGenerator.generate();
             const user = {
@@ -63,7 +66,10 @@ class UserBusiness {
                     throw new error_1.BaseError('email not valid');
             });
             const result = yield this.dbUsers.get(loginInput.email);
-            const validatePassword = result && (yield this.hashManager.compare(loginInput.password, result.password));
+            if (!result) {
+                throw new error_1.BaseError('E-mail and password are not valid');
+            }
+            const validatePassword = yield this.hashManager.compare(loginInput.password, result.password);
             if (!validatePassword)
                 throw new error_1.BaseError('E-mail and password are not valid');
             const token = this.authenticator.generateToken({ id: result.id });

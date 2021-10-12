@@ -27,9 +27,10 @@ class DbUsers {
             return true;
         });
     }
-    get(id) {
+    get(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield connection_1.connection.query(`SELECT id, password FROM ${this.tableName};`);
+            const result = yield connection_1.connection.query(`SELECT id, password FROM ${this.tableName} where ${this.tableName}.email = '${email}';`);
+            return result[0][0];
         });
     }
 }

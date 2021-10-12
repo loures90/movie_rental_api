@@ -20,7 +20,7 @@ class UserController {
                 res.status(200).send({ token });
             }
             catch (error) {
-                throw error;
+                res.status(error.status || 400).send({ error: error.message });
             }
         });
     }
@@ -32,7 +32,7 @@ class UserController {
                 res.status(200).send({ token });
             }
             catch (error) {
-                throw error;
+                res.status(error.status || 400).send({ error: error.message });
             }
         });
     }
