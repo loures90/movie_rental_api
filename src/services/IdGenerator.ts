@@ -6,4 +6,4 @@ export class IdGenerator{
         return v4();
     }
 }
-export default new IdGenerator()
+export const idGenerator = new IdGenerator()

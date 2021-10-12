@@ -3,7 +3,7 @@ import { Sequelize } from 'sequelize'
 
 dotenv.config()
 
-const connection = new Sequelize({
+export const connection = new Sequelize({
     dialect: 'mysql',
     username: process.env.DB_USER || 'any_user',
     password: process.env.DB_PASSWORD || 'any_password',
