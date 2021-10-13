@@ -71,10 +71,61 @@ export class MoviesBusiness {
         return await this.dbMovies.getMovie(id)
     }
 
-    async filter(filters: any, token: string) {
+    async filter(filtersInput: any, token: string) {
+        const filters = { ...filtersInput }
         const isAuthenticated = this.authenticator.getData(token)
         if (!isAuthenticated.id) throw new BaseError('Forbidden')
 
+        const validParams = ['title', 'year_release', 'category', 'notation']
+        Object.keys(filters).forEach(key => {
+            if (!validParams.includes(key)) throw new BaseError(key + ' filter not allowed')
+        });
+
+        if (filters.notation) {
+            if (filters.notation === 'gt')
+                filters.notation = '>'
+            else if (filters.notation === 'lt')
+                filters.notation = '<'
+            else
+                throw new BaseError('Year release filter notation should be "gt" or "lt"')
+        }
+        
+        if (filters.category) {
+            const isAValidCategory = movieCategories.includes(filters.category.toUpperCase())
+            if (!isAValidCategory) throw new BaseError(filters.category + ' is not a valid category.')
+
+            let category
+            switch (filters.category.toUpperCase()) {
+                case 'ACTION':
+                    category = Categories.Action
+                    break;
+                case 'COMEDY':
+                    category = Categories.Comedy
+                    break;
+                case 'DRAMA':
+                    category = Categories.Drama
+                    break;
+                case 'FANTASY':
+                    category = Categories.Fantasy
+                    break;
+                case 'HORROR':
+                    category = Categories.Horror
+                    break;
+                case 'MYSTERY':
+                    category = Categories.Mystery
+                    break;
+                case 'ROMANCE':
+                    category = Categories.Romance
+                    break;
+                case 'THRILLER':
+                    category = Categories.Thriller
+                    break;
+                default:
+                    category = Categories.Thriller
+                    break;
+            }
+            filters.category = category
+        }
         return await this.dbMovies.filter(filters)
     }
 
@@ -84,7 +135,7 @@ export class MoviesBusiness {
         return await this.dbMovies.delete(id)
     }
 
-    async update(updateMovie: Partial<AddMoviesModel>, id: string, token: string):Promise<Boolean> {
+    async update(updateMovie: Partial<AddMoviesModel>, id: string, token: string): Promise<Boolean> {
         const isAuthenticated = this.authenticator.getData(token)
         if (!isAuthenticated.id) throw new BaseError('Forbidden')
 
@@ -126,7 +177,7 @@ export class MoviesBusiness {
                     category = Categories.Thriller
                     break;
             }
-            movie = {...movie, category: category }
+            movie = { ...movie, category: category }
         }
         return await this.dbMovies.update(movie, id)
     }

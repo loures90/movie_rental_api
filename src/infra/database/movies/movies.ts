@@ -1,3 +1,4 @@
+import { query } from "express";
 import { AddMoviesModel, MoviesModel } from "../../../models/movies";
 import { connection } from "../../connection";
 
@@ -25,11 +26,22 @@ export class DBMovies {
     }
 
     async filter(filters: any):Promise<any> {
+        const query = []
+        filters.title && query.push(`title = '${filters.title}'`)
+        filters.category && query.push(`category = '${filters.category}'`)
+        filters.notation && filters.year_release && query.push(`year_release ${filters.notation} '${filters.year_release}'`)
+        !filters.notation && filters.year_release && query.push(`year_release = '${filters.year_release}'`)
+        let where = ''
+        query.forEach((part, index)=>{
+            if(index !== query.length-1)
+                where += part + ' and '
+            else
+                where += part 
+        })
+        console.log(where, query)
+        
         const result = await connection.query(`
-            SELECT * FROM  ${this.tableName} WHERE ${ filters.title && 'title = ' + filters.title + 
-                         filters.year_release && 'and year_release = ' + filters.year_release + 
-                         filters.category && 'and category = ' + filters.category} 
-            ;`)
+            SELECT * FROM  ${this.tableName} WHERE ${where};`)
         return result[0]
     }
 

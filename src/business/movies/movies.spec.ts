@@ -27,9 +27,13 @@ class DbMovieStub extends DBMovies {
     delete(id:string): Promise<Boolean> {
         return Promise.resolve(true)
     }
-    async update(movie: Partial<AddMoviesModel>, id: string):Promise<Boolean> {
+    update(movie: Partial<AddMoviesModel>, id: string):Promise<Boolean> {
         return Promise.resolve(true)
     }
+    filter(filters: any):Promise<any> {
+        return Promise.resolve([fixMovies])
+    }
+
 }
 const dbMovieStub = new DbMovieStub()
 
@@ -110,7 +114,6 @@ describe('MOVIES', () => {
             expect(movieSpy).toHaveBeenCalledWith('abc123')
         })
     })
-
     describe('Delete a movie by id', () => {
         test('It should delete a movie', async () => {
             const result = await movieBusinessStub.delete('abc123','token')
@@ -127,7 +130,6 @@ describe('MOVIES', () => {
             expect(movieSpy).toHaveBeenCalledWith('abc123')
         })
     })
-
     describe('Update movie', () => {
         test('It should add a movie', async () => {
             const result = await movieBusinessStub.update(fixAddMovies, 'abc123', 'token')
@@ -158,6 +160,56 @@ describe('MOVIES', () => {
             const movieSpy = jest.spyOn(dbMovieStub, 'update')
             await movieBusinessStub.update(fixAddMovies, 'abc123', 'token')
             expect(movieSpy).toHaveBeenCalledWith({ ...fixAddMovies, category: Categories.Action }, 'abc123')
+        })
+    })
+
+    describe('Delete a movie by id', () => {
+        const filterStub = {
+            title: 'any_title',
+            category: 'Comedy',
+            year_release: '2001',
+            notation: 'gt'
+        }
+        test('It should delete a movie', async () => {
+            const result = await movieBusinessStub.filter(filterStub,'token')
+            expect(result[0]).toEqual(expect.objectContaining({category: 'ACTION', id: 'any_id', title: 'any_title', year_release: '2021'}))
+        })
+        test('It should call Authenticator with correct values', async () => {
+            const authSpy = jest.spyOn(authenticatorStub, 'getData')
+            await movieBusinessStub.filter(filterStub,'token')
+            expect(authSpy).toHaveBeenCalledWith('token')
+        })
+        test('It should check if filters are valid', async () => {
+            const result = movieBusinessStub.filter({ ...filterStub, otherFilter: 'any'}, 'token')
+            await expect(result).rejects.toThrowError(BaseError)
+        })
+        test('It should check if notation is valid', async () => {
+            const result = movieBusinessStub.filter({ ...filterStub, notation: '>>>'}, 'token')
+            await expect(result).rejects.toThrowError(BaseError)
+        })
+        test('It should check if some input is empty valid', async () => {
+            const result = movieBusinessStub.filter({
+                title: 'any_title',
+                year_release: '2021',
+                category: 'not_a_category',
+                notation: 'gt'
+            }, 'token')
+            await expect(result).rejects.toThrowError(BaseError)
+        })
+        test('It should call dbMovies with correct values', async () => {
+            const movieSpy = jest.spyOn(dbMovieStub, 'filter')
+            await movieBusinessStub.filter(filterStub,'token')
+            expect(movieSpy).toHaveBeenCalledWith({ ...filterStub, category: 'COMEDY', notation: '>'})
+        })
+        test('It should call dbMovies with correct values', async () => {
+            const secondFilterStub = { 
+                title: 'any_title',
+                category: 'Comedy',
+                year_release: '2001'
+            }
+            const movieSpy = jest.spyOn(dbMovieStub, 'filter')
+            await movieBusinessStub.filter(secondFilterStub,'token')
+            expect(movieSpy).toHaveBeenCalledWith({ ...secondFilterStub, category: 'COMEDY'})
         })
     })
 })
