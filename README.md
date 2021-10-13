@@ -98,7 +98,7 @@ QUERY PARAMS:
  - title: movie title.
  - category: movie category.
  - year_release: year of creation
- - notation: years to search (gt = ">" and lt = "<")
+ - notation: years to search (gt = ">" and lt = "<"). If notation is not used, the filter consider year_release = 2000, for exemple.
 RESPONSE:
 [
   {
@@ -109,7 +109,11 @@ RESPONSE:
   }
 ]
 
-Example: http://localhost:3003/movies/filters/search?title=TITLE&category=COMEDY&year_release=200&notation:gt, is going to search a title named "TITLE", category named "COMEDY", year_release greater than 2000 
+Example: http://localhost:3003/movies/filters/search?title=TITLE&category=COMEDY&year_release=2000&notation:gt, is going to search a title named "TITLE", category named "COMEDY", year_release greater than 2000 
+
+Example: http://localhost:3003/movies/filters/search?title=TITLE&category=COMEDY&year_release=2000&notation:lt, is going to search a title named "TITLE", category named "COMEDY", year_release less than 2000
+
+Example: http://localhost:3003/movies/filters/search?title=TITLE&category=COMEDY&year_release=2000, is going to search a title named "TITLE", category named "COMEDY", year_release equal to 2000
 ***
 ### Delete a movie
 Method: DELETE
