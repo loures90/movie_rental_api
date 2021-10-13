@@ -36,7 +36,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhYjNhM2JhLWY0MGIt
 
 ###
 
-GET http://localhost:3003/movies/1d21b5c4-679c-40fa-8458-0c22b9e34e48
+GET http://localhost:3003/movies/8cd2cd71-a451-41b6-a788-68ff7c4fb4d3
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhYjNhM2JhLWY0MGItNDU2MC1iY2ZmLWQxN2FjMGNhNTJlNSIsImlhdCI6MTYzNDA2MzY0NSwiZXhwIjoxNjM0MTUwMDQ1fQ.1evX_JxaX75kJGanrPRK7cYXaGX9AWoQr0htvWuc-zw
 
