@@ -1,0 +1,67 @@
+POST http://localhost:3003/user/signup
+Content-Type: application/json
+
+{
+    "name": "Teste",
+    "email":"teste@teste.com",
+    "login": "teste",
+    "password": "123456"
+}
+
+###
+POST http://localhost:3003/user/login
+Content-Type: application/json
+
+{
+    "email":"teste@teste.com",
+    "password": "123456"
+}
+###
+
+POST http://localhost:3003/movies/add
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhYjNhM2JhLWY0MGItNDU2MC1iY2ZmLWQxN2FjMGNhNTJlNSIsImlhdCI6MTYzNDA2MzY0NSwiZXhwIjoxNjM0MTUwMDQ1fQ.1evX_JxaX75kJGanrPRK7cYXaGX9AWoQr0htvWuc-zw
+
+{
+    "title": "Teste1",
+    "year_release":"2021",
+    "category": "Comedy"
+}
+
+###
+
+GET http://localhost:3003/movies/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhYjNhM2JhLWY0MGItNDU2MC1iY2ZmLWQxN2FjMGNhNTJlNSIsImlhdCI6MTYzNDA2MzY0NSwiZXhwIjoxNjM0MTUwMDQ1fQ.1evX_JxaX75kJGanrPRK7cYXaGX9AWoQr0htvWuc-zw
+
+###
+
+GET http://localhost:3003/movies/8cd2cd71-a451-41b6-a788-68ff7c4fb4d3
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhYjNhM2JhLWY0MGItNDU2MC1iY2ZmLWQxN2FjMGNhNTJlNSIsImlhdCI6MTYzNDA2MzY0NSwiZXhwIjoxNjM0MTUwMDQ1fQ.1evX_JxaX75kJGanrPRK7cYXaGX9AWoQr0htvWuc-zw
+
+###
+
+GET http://localhost:3003/movies/filters/search?title=Teste1&category=COMEDY&year_release=2021
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhYjNhM2JhLWY0MGItNDU2MC1iY2ZmLWQxN2FjMGNhNTJlNSIsImlhdCI6MTYzNDA2MzY0NSwiZXhwIjoxNjM0MTUwMDQ1fQ.1evX_JxaX75kJGanrPRK7cYXaGX9AWoQr0htvWuc-zw
+
+###
+
+DELETE http://localhost:3003/movies/1d21b5c4-679c-40fa-8458-0c22b9e34e48
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhYjNhM2JhLWY0MGItNDU2MC1iY2ZmLWQxN2FjMGNhNTJlNSIsImlhdCI6MTYzNDA2MzY0NSwiZXhwIjoxNjM0MTUwMDQ1fQ.1evX_JxaX75kJGanrPRK7cYXaGX9AWoQr0htvWuc-zw
+
+###
+
+PATCH http://localhost:3003/movies/8cd2cd71-a451-41b6-a788-68ff7c4fb4d3
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhYjNhM2JhLWY0MGItNDU2MC1iY2ZmLWQxN2FjMGNhNTJlNSIsImlhdCI6MTYzNDA2MzY0NSwiZXhwIjoxNjM0MTUwMDQ1fQ.1evX_JxaX75kJGanrPRK7cYXaGX9AWoQr0htvWuc-zw
+
+{
+    "title": "title_again",
+    "category": "ACTION",
+    "year_release": "2001"
+}
+
+###
