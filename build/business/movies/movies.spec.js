@@ -30,35 +30,30 @@ class DbMovieStub extends movies_1.DBMovies {
     getMovie() {
         return Promise.resolve(movies_4.fixMovies);
     }
+    delete(id) {
+        return Promise.resolve(true);
+    }
+    update(movie, id) {
+        return Promise.resolve(true);
+    }
+    filter(filters) {
+        return Promise.resolve([movies_4.fixMovies]);
+    }
 }
 const dbMovieStub = new DbMovieStub();
-class AuthenticatorStub {
-    generateToken(input, expiresIn) {
-        return 'token';
-    }
-    getData(token) {
-        return { id: 'abc123' };
-    }
-}
-const authenticatorStub = new AuthenticatorStub();
-const movieBusinessStub = new movies_3.MoviesBusiness(idGeneratorStub, authenticatorStub, dbMovieStub);
+const movieBusinessStub = new movies_3.MoviesBusiness(idGeneratorStub, dbMovieStub);
 describe('MOVIES', () => {
     describe('Add movie', () => {
         test('It should add a movie', () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = yield movieBusinessStub.create(movies_4.fixAddMovies, 'token');
+            const result = yield movieBusinessStub.create(movies_4.fixAddMovies);
             expect(result).toBe(true);
-        }));
-        test('It should call AuthenticatorStub with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
-            const authSpy = jest.spyOn(authenticatorStub, 'getData');
-            yield movieBusinessStub.create(movies_4.fixAddMovies, 'token');
-            expect(authSpy).toHaveBeenCalledWith('token');
         }));
         test('It should check if some input is empty valid', () => __awaiter(void 0, void 0, void 0, function* () {
             const result = movieBusinessStub.create({
                 title: '',
                 year_release: '2021',
                 category: 'Action'
-            }, 'token');
+            });
             yield expect(result).rejects.toThrowError(error_1.BaseError);
         }));
         test('It should check if some input is empty valid', () => __awaiter(void 0, void 0, void 0, function* () {
@@ -66,45 +61,117 @@ describe('MOVIES', () => {
                 title: 'any_title',
                 year_release: '2021',
                 category: 'not_a_category'
-            }, 'token');
+            });
             yield expect(result).rejects.toThrowError(error_1.BaseError);
         }));
         test('It should call dbMovies with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
             const movieSpy = jest.spyOn(dbMovieStub, 'create');
-            yield movieBusinessStub.create(movies_4.fixAddMovies, 'token');
+            yield movieBusinessStub.create(movies_4.fixAddMovies);
             expect(movieSpy).toHaveBeenCalledWith(Object.assign(Object.assign({}, movies_4.fixAddMovies), { id: 'abc123', category: movies_2.Categories.Action }));
         }));
     });
     describe('List movie', () => {
         test('It should list movies', () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = yield movieBusinessStub.list('token');
+            const result = yield movieBusinessStub.list();
             expect(result[0]).toEqual(expect.objectContaining({ category: 'ACTION', id: 'any_id', title: 'any_title', year_release: '2021' }));
-        }));
-        test('It should call AuthenticatorStub with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
-            const authSpy = jest.spyOn(authenticatorStub, 'getData');
-            yield movieBusinessStub.list('token');
-            expect(authSpy).toHaveBeenCalledWith('token');
         }));
         test('It should call dbMovies with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
             const movieSpy = jest.spyOn(dbMovieStub, 'list');
-            yield movieBusinessStub.list('token');
+            yield movieBusinessStub.list();
             expect(movieSpy).toHaveBeenCalledWith();
         }));
     });
     describe('Get a movie by id', () => {
         test('It should get a movie', () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = yield movieBusinessStub.getMovie('abc123', 'token');
+            const result = yield movieBusinessStub.getMovie('abc123');
             expect(result).toBe(movies_4.fixMovies);
-        }));
-        test('It should call Authenticator with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
-            const authSpy = jest.spyOn(authenticatorStub, 'getData');
-            yield movieBusinessStub.getMovie('abc123', 'token');
-            expect(authSpy).toHaveBeenCalledWith('token');
         }));
         test('It should call dbMovies with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
             const movieSpy = jest.spyOn(dbMovieStub, 'getMovie');
-            yield movieBusinessStub.getMovie('abc123', 'token');
+            yield movieBusinessStub.getMovie('abc123');
             expect(movieSpy).toHaveBeenCalledWith('abc123');
+        }));
+    });
+    describe('Delete a movie by id', () => {
+        test('It should delete a movie', () => __awaiter(void 0, void 0, void 0, function* () {
+            const result = yield movieBusinessStub.delete('abc123');
+            expect(result).toBe(true);
+        }));
+        test('It should call dbMovies with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
+            const movieSpy = jest.spyOn(dbMovieStub, 'delete');
+            yield movieBusinessStub.delete('abc123');
+            expect(movieSpy).toHaveBeenCalledWith('abc123');
+        }));
+    });
+    describe('Update movie', () => {
+        test('It should add a movie', () => __awaiter(void 0, void 0, void 0, function* () {
+            const result = yield movieBusinessStub.update(movies_4.fixAddMovies, 'abc123');
+            expect(result).toBe(true);
+        }));
+        test('It should check if some input is empty valid', () => __awaiter(void 0, void 0, void 0, function* () {
+            const result = movieBusinessStub.update({
+                title: '',
+                year_release: '2021',
+                category: 'Action'
+            }, 'abc123');
+            yield expect(result).rejects.toThrowError(error_1.BaseError);
+        }));
+        test('It should check if some input is empty valid', () => __awaiter(void 0, void 0, void 0, function* () {
+            const result = movieBusinessStub.update({
+                title: 'any_title',
+                year_release: '2021',
+                category: 'not_a_category'
+            }, 'abc123');
+            yield expect(result).rejects.toThrowError(error_1.BaseError);
+        }));
+        test('It should call dbMovies with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
+            const movieSpy = jest.spyOn(dbMovieStub, 'update');
+            yield movieBusinessStub.update(movies_4.fixAddMovies, 'abc123');
+            expect(movieSpy).toHaveBeenCalledWith(Object.assign(Object.assign({}, movies_4.fixAddMovies), { category: movies_2.Categories.Action }), 'abc123');
+        }));
+    });
+    describe('Delete a movie by id', () => {
+        const filterStub = {
+            title: 'any_title',
+            category: 'Comedy',
+            year_release: '2001',
+            notation: 'gt'
+        };
+        test('It should delete a movie', () => __awaiter(void 0, void 0, void 0, function* () {
+            const result = yield movieBusinessStub.filter(filterStub);
+            expect(result[0]).toEqual(expect.objectContaining({ category: 'ACTION', id: 'any_id', title: 'any_title', year_release: '2021' }));
+        }));
+        test('It should check if filters are valid', () => __awaiter(void 0, void 0, void 0, function* () {
+            const result = movieBusinessStub.filter(Object.assign(Object.assign({}, filterStub), { otherFilter: 'any' }));
+            yield expect(result).rejects.toThrowError(error_1.BaseError);
+        }));
+        test('It should check if notation is valid', () => __awaiter(void 0, void 0, void 0, function* () {
+            const result = movieBusinessStub.filter(Object.assign(Object.assign({}, filterStub), { notation: '>>>' }));
+            yield expect(result).rejects.toThrowError(error_1.BaseError);
+        }));
+        test('It should check if some input is empty valid', () => __awaiter(void 0, void 0, void 0, function* () {
+            const result = movieBusinessStub.filter({
+                title: 'any_title',
+                year_release: '2021',
+                category: 'not_a_category',
+                notation: 'gt'
+            });
+            yield expect(result).rejects.toThrowError(error_1.BaseError);
+        }));
+        test('It should call dbMovies with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
+            const movieSpy = jest.spyOn(dbMovieStub, 'filter');
+            yield movieBusinessStub.filter(filterStub);
+            expect(movieSpy).toHaveBeenCalledWith(Object.assign(Object.assign({}, filterStub), { category: 'COMEDY', notation: '>' }));
+        }));
+        test('It should call dbMovies with correct values', () => __awaiter(void 0, void 0, void 0, function* () {
+            const secondFilterStub = {
+                title: 'any_title',
+                category: 'Comedy',
+                year_release: '2001'
+            };
+            const movieSpy = jest.spyOn(dbMovieStub, 'filter');
+            yield movieBusinessStub.filter(secondFilterStub);
+            expect(movieSpy).toHaveBeenCalledWith(Object.assign(Object.assign({}, secondFilterStub), { category: 'COMEDY' }));
         }));
     });
 });

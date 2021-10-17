@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
+import { BaseError } from "sequelize/types";
 import { userBusiness } from "../../business/users/user";
+import { Authenticator } from "../../services/Authenticator";
 export class UserController {
     async signup(req: Request, res: Response) {
         try {
@@ -12,7 +14,7 @@ export class UserController {
     }
 
     async login(req: Request, res: Response) {
-        try {
+        try {  
             const { email, password } = req.body
             const token = await userBusiness.login({ email, password })
             res.status(200).send( {token} );

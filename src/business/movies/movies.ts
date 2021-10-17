@@ -7,12 +7,10 @@ import { idGenerator, IdGenerator } from '../../services/IdGenerator'
 export class MoviesBusiness {
     constructor(
         readonly idGenerator: IdGenerator,
-        readonly authenticator: Authenticator,
         readonly dbMovies: DBMovies,
     ) { }
-    async create(inputMovie: AddMoviesModel, token: string): Promise<Boolean> {
-        const isAuthenticated = this.authenticator.getData(token)
-        if (!isAuthenticated.id) throw new BaseError('Forbidden')
+    async create(inputMovie: AddMoviesModel): Promise<Boolean> {
+
 
         if (!inputMovie.title || !inputMovie.year_release || !inputMovie.category)
             throw new BaseError('Values can not be empty')
@@ -57,25 +55,16 @@ export class MoviesBusiness {
         return true
     }
 
-    async list(token: string): Promise<any> {
-        const isAuthenticated = this.authenticator.getData(token)
-        if (!isAuthenticated.id) throw new BaseError('Forbidden')
-
+    async list(): Promise<any> {
         return await this.dbMovies.list()
     }
 
-    async getMovie(id: string, token: string) {
-        const isAuthenticated = this.authenticator.getData(token)
-        if (!isAuthenticated.id) throw new BaseError('Forbidden')
-
+    async getMovie(id: string) {
         return await this.dbMovies.getMovie(id)
     }
 
-    async filter(filtersInput: any, token: string) {
+    async filter(filtersInput: any) {
         const filters = { ...filtersInput }
-        const isAuthenticated = this.authenticator.getData(token)
-        if (!isAuthenticated.id) throw new BaseError('Forbidden')
-
         const validParams = ['title', 'year_release', 'category', 'notation']
         Object.keys(filters).forEach(key => {
             if (!validParams.includes(key)) throw new BaseError(key + ' filter not allowed')
@@ -129,16 +118,11 @@ export class MoviesBusiness {
         return await this.dbMovies.filter(filters)
     }
 
-    async delete(id: string, token: string): Promise<Boolean> {
-        const isAuthenticated = this.authenticator.getData(token)
-        if (!isAuthenticated.id) throw new BaseError('Forbidden')
+    async delete(id: string): Promise<Boolean> {
         return await this.dbMovies.delete(id)
     }
 
-    async update(updateMovie: Partial<AddMoviesModel>, id: string, token: string): Promise<Boolean> {
-        const isAuthenticated = this.authenticator.getData(token)
-        if (!isAuthenticated.id) throw new BaseError('Forbidden')
-
+    async update(updateMovie: Partial<AddMoviesModel>, id: string): Promise<Boolean> {
         Object.values(updateMovie).forEach(value => {
             if (!value) throw new BaseError('Values can not be empty')
         });
@@ -182,4 +166,4 @@ export class MoviesBusiness {
         return await this.dbMovies.update(movie, id)
     }
 }
-export const moviesBusiness = new MoviesBusiness(idGenerator, authenticator, dbMovies)
+export const moviesBusiness = new MoviesBusiness(idGenerator, dbMovies)
