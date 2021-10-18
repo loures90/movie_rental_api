@@ -1,10 +1,9 @@
 import { IdGenerator } from '../../services/IdGenerator'
-import { AuthenticationData, Authenticator } from '../../services/Authenticator';
-import { DBMovies } from '../../infra/database/movies/movies';
-import { AddMoviesModel, Categories, MoviesModel } from '../../models/movies';
-import { MoviesBusiness } from './movies';
-import { fixAddMovies, fixMovies } from '../../_fixtures/movies';
-import { BaseError } from '../../models/error';
+import { DBMovies } from '../../infra/database/movies/movies'
+import { Categories, MoviesModel } from '../../models/movies'
+import { MoviesBusiness } from './movies'
+import { fixAddMovies, fixMovies } from '../../_fixtures/movies'
+import { BaseError } from '../../models/error'
 
 
 class IdGeneratorStub implements IdGenerator {
@@ -15,25 +14,24 @@ class IdGeneratorStub implements IdGenerator {
 const idGeneratorStub = new IdGeneratorStub()
 
 class DbMovieStub extends DBMovies {
-    create(movie: MoviesModel): Promise<Boolean> {
+    create(): Promise<boolean> {
         return Promise.resolve(true)
     }
-    list(): Promise<any> {
+    list(): Promise<MoviesModel[]> {
         return Promise.resolve([fixMovies])
     }
-    getMovie(): Promise<any> {
+    getMovie(): Promise<MoviesModel> {
         return Promise.resolve(fixMovies)
     }
-    delete(id:string): Promise<Boolean> {
+    delete(): Promise<boolean> {
         return Promise.resolve(true)
     }
-    update(movie: Partial<AddMoviesModel>, id: string):Promise<Boolean> {
+    update():Promise<boolean> {
         return Promise.resolve(true)
     }
-    filter(filters: any):Promise<any> {
+    filter():Promise<MoviesModel[]> {
         return Promise.resolve([fixMovies])
     }
-
 }
 const dbMovieStub = new DbMovieStub()
 

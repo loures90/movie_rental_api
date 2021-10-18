@@ -1,9 +1,9 @@
-import { AddUserModel, LoginModel } from "../../models/users";
-import { idGenerator, IdGenerator } from "../../services/IdGenerator";
-import { hashManager, HashManager } from "../../services/HashManager";
-import { BaseError } from '../../models/error';
-import { dbUsers, DbUsers } from "../../infra/database/user/user";
-import { authenticator, Authenticator } from "../../services/Authenticator";
+import { AddUserModel, LoginModel } from '../../models/users'
+import { idGenerator, IdGenerator } from '../../services/IdGenerator'
+import { hashManager, HashManager } from '../../services/HashManager'
+import { BaseError } from '../../models/error'
+import { dbUsers, DbUsers } from '../../infra/database/user/user'
+import { authenticator, Authenticator } from '../../services/Authenticator'
 
 export class UserBusiness {
     constructor(
@@ -15,16 +15,16 @@ export class UserBusiness {
     async signup(userInput: AddUserModel): Promise<string> {
         Object.values(userInput).forEach(value => {
             if (!value) throw new BaseError('Values can not be empty', 400)
-        });
+        })
         const validEmail = ['@', '.com']
         validEmail.forEach(element => {
             if (!userInput.email.includes(element))
-                throw new BaseError('email not valid');
+                throw new BaseError('email not valid')
         })
         if (userInput.password.length < 6)
-            throw new BaseError('password not valid, it should have at least 6 characters');
+            throw new BaseError('password not valid, it should have at least 6 characters')
         const userExist = await this.dbUsers.get(userInput.email)
-        if(userExist) throw new BaseError('This e-mail already used');
+        if(userExist) throw new BaseError('This e-mail already used')
 
         const hashPassword = await this.hashManager.hash(userInput.password)
         const id = this.idGenerator.generate()
@@ -45,14 +45,14 @@ export class UserBusiness {
 
         Object.values(loginInput).forEach(value => {
             if (!value) throw new BaseError('Values can not be empty', 400)
-        });
+        })
         if (loginInput.password.length < 6)
-            throw new BaseError('password not valid, it should have at least 6 characters');
+            throw new BaseError('password not valid, it should have at least 6 characters')
 
         const validEmail = ['@', '.com']
         validEmail.forEach(element => {
             if (!loginInput.email.includes(element))
-                throw new BaseError('email not valid');
+                throw new BaseError('email not valid')
         })
 
         const result = await this.dbUsers.get(loginInput.email)
@@ -67,4 +67,4 @@ export class UserBusiness {
 
     }
 }
-export const userBusiness = new UserBusiness(idGenerator, hashManager, dbUsers, authenticator);
+export const userBusiness = new UserBusiness(idGenerator, hashManager, dbUsers, authenticator)

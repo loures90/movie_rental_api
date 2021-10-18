@@ -1,15 +1,13 @@
-import { Request, Response } from "express";
-import { BaseError } from "sequelize/types";
-import { userBusiness } from "../../business/users/user";
-import { Authenticator } from "../../services/Authenticator";
+import { Request, Response } from 'express'
+import { userBusiness } from '../../business/users/user'
 export class UserController {
     async signup(req: Request, res: Response) {
         try {
             const { name, email, login, password } = req.body
             const token = await userBusiness.signup({ name, email, login, password })
-            res.status(200).send( {token} );
+            res.status(200).send( {token} )
         } catch (error: any) {
-            res.status(error.status || 400).send({error: error.message});
+            res.status(error.status || 400).send({error: error.message})
         }
     }
 
@@ -17,9 +15,9 @@ export class UserController {
         try {  
             const { email, password } = req.body
             const token = await userBusiness.login({ email, password })
-            res.status(200).send( {token} );
+            res.status(200).send( {token} )
         } catch (error: any) {
-            res.status(error.status || 400).send({error: error.message});
+            res.status(error.status || 400).send({error: error.message})
         }
     }
 }

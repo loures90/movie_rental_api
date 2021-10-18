@@ -22,3 +22,10 @@ export enum Categories {
     Thriller = 'THRILLER'
 }
 export const movieCategories = ['ACTION', 'COMEDY', 'DRAMA', 'FANTASY', 'HORROR', 'MYSTERY', 'ROMANCE', 'THRILLER']
+
+export interface InputFilters {
+    title?: string
+    year_release?: string
+    category?: string
+    notation?: string
+}

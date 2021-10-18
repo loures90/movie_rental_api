@@ -1,4 +1,4 @@
-import { AddMoviesModel, Categories, MoviesModel } from "../models/movies";
+import { AddMoviesModel, Categories, MoviesModel } from '../models/movies'
 
 export const fixMovies: MoviesModel = {
     id: 'any_id',

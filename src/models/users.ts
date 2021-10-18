@@ -5,8 +5,7 @@ export interface UsersModel {
     email: string
     password: string
 }
-export interface AddUserModel extends Omit<UsersModel, 'id'> {
-}
+export type AddUserModel = Omit<UsersModel, 'id'>
 
 export interface LoginModel {
     email: string
