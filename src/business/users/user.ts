@@ -36,9 +36,10 @@ export class UserBusiness {
             password: hashPassword
         }
         const result = await this.dbUsers.add(user)
-
-        const token = result && this.authenticator.generateToken({ id })
-        return token
+        if(!result) 
+            throw new BaseError('Error trying to signup, try again')
+            
+        return this.authenticator.generateToken({ id })
     }
 
     async login(loginInput: LoginModel): Promise<string> {

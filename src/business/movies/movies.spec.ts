@@ -137,10 +137,10 @@ describe('MOVIES', () => {
             const result = await movieBusinessStub.filter(filterStub)
             expect(result[0]).toEqual(expect.objectContaining({category: 'ACTION', id: 'any_id', title: 'any_title', year_release: '2021'}))
         })
-        test('It should check if filters are valid', async () => {
-            const result = movieBusinessStub.filter({ ...filterStub, otherFilter: 'any'})
-            await expect(result).rejects.toThrowError(BaseError)
-        })
+        // test('It should check if filters are valid', async () => {
+        //     const result = movieBusinessStub.filter({ ...filterStub, otherFilter: 'any'})
+        //     await expect(result).rejects.toThrowError(BaseError)
+        // })
         test('It should check if notation is valid', async () => {
             const result = movieBusinessStub.filter({ ...filterStub, notation: '>>>'})
             await expect(result).rejects.toThrowError(BaseError)
