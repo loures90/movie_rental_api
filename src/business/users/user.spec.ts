@@ -1,11 +1,10 @@
 import { IdGenerator } from '../../services/IdGenerator'
 import { fixAddUser, fixLogin } from '../../_fixtures/users'
-import { UsersModel } from '../../models/users';
-import { BaseError } from '../../models/error';
-import { HashManager } from '../../services/HashManager';
-import { DbUsers } from '../../infra/database/user/user';
-import { AuthenticationData, Authenticator } from '../../services/Authenticator';
-import { UserBusiness } from './user';
+import { BaseError } from '../../models/error'
+import { HashManager } from '../../services/HashManager'
+import { DbUsers } from '../../infra/database/user/user'
+import { AuthenticationData, Authenticator } from '../../services/Authenticator'
+import { UserBusiness } from './user'
 
 
 class IdGeneratorStub implements IdGenerator {
@@ -16,7 +15,7 @@ class IdGeneratorStub implements IdGenerator {
 const idGeneratorStub = new IdGeneratorStub()
 
 class DbUsersStub extends DbUsers {
-    add(user: UsersModel): Promise<Boolean> {
+    add(): Promise<boolean> {
         return Promise.resolve(true)
     }
     get(email: string): Promise<any>{
@@ -28,20 +27,20 @@ class DbUsersStub extends DbUsers {
 const dbUsersStub = new DbUsersStub()
 
 class HashManagerStub implements HashManager {
-    async hash(text: string): Promise<string> {
+    async hash(): Promise<string> {
         return Promise.resolve('hash_password')
     }
-    public async compare(text: string, hash: string): Promise<boolean> {
+    public async compare(): Promise<boolean> {
         return Promise.resolve(true)
     }
 }
 const hashManagerStub = new HashManagerStub()
 
 class AuthenticatorStub implements Authenticator {
-    public generateToken(input: AuthenticationData, expiresIn: 'any'): string {
+    public generateToken(): string {
         return 'token'
     }
-    public getData(token: string): AuthenticationData {
+    public getData(): AuthenticationData {
         return { id: 'abc123' }
     }
 }

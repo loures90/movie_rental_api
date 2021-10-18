@@ -40,20 +40,43 @@ class DBMovies {
     }
     filter(filters) {
         return __awaiter(this, void 0, void 0, function* () {
+            const query = [];
+            filters.title && query.push(`title = '${filters.title}'`);
+            filters.category && query.push(`category = '${filters.category}'`);
+            filters.notation && filters.year_release && query.push(`year_release ${filters.notation} '${filters.year_release}'`);
+            !filters.notation && filters.year_release && query.push(`year_release = '${filters.year_release}'`);
+            let where = '';
+            query.forEach((part, index) => {
+                if (index !== query.length - 1)
+                    where += part + ' and ';
+                else
+                    where += part;
+            });
+            console.log(where, query);
             const result = yield connection_1.connection.query(`
-            SELECT * FROM  ${this.tableName} WHERE ${filters.title && 'title = ' + filters.title +
-                filters.year_release && 'and year_release = ' + filters.year_release +
-                filters.category && 'and category = ' + filters.category} 
-            ;`);
+            SELECT * FROM  ${this.tableName} WHERE ${where};`);
             return result[0];
         });
     }
-    delete() {
+    delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield connection_1.connection.query(`DELETE FROM  ${this.tableName} WHERE id = '${id}';`);
+            return true;
         });
     }
-    update() {
+    update(movie, id) {
         return __awaiter(this, void 0, void 0, function* () {
+            let query = [];
+            movie.title && query.push(`title = '${movie.title}'`);
+            movie.category && query.push(`category = '${movie.category}'`);
+            movie.year_release && query.push(`year_release = '${movie.year_release}'`);
+            let result = '';
+            query.forEach(piece => {
+                result += piece + ', ';
+            });
+            result = result.substring(0, result.length - 2);
+            yield connection_1.connection.query(`UPDATE ${this.tableName} set ${result} where id = '${id}';`);
+            return true;
         });
     }
 }
